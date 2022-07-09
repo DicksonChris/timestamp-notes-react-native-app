@@ -11,7 +11,7 @@ import { Icon } from 'react-native-elements'
 import { useDispatch } from 'react-redux'
 import logo from '../assets/images/logo.png'
 import { fetchNotes } from '../features/notes/notesSlice'
-import NotesScreen from './NotesScreen'
+import NotesScreen from './NotesScreen/NotesScreen.main'
 import AboutScreen from './AboutScreen'
 
 const Drawer = createDrawerNavigator()
@@ -95,7 +95,7 @@ const Main = () => {
       }}
     >
       <Drawer.Navigator
-        initialRouteName='Home'
+        initialRouteName='Notes'
         drawerContent={CustomDrawerContent}
         drawerStyle={{ backgroundColor: '#CEC8FF' }}
       >
