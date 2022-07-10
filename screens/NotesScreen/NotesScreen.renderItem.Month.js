@@ -19,14 +19,31 @@ const RenderMonth = ({ item: month }, { year, renderData }) => {
 
   return (
     <View>
-      <Text>{MONTHS[parseInt(month)]}</Text>
-      <FlatList
-        data={Object.keys(renderData[year][month])}
-        renderItem={(item) => RenderDate(item, { year, month, renderData })}
-        keyExtractor={(item) => JSON.stringify(item)}
-      />
+      <View style={styles.container}>
+        <Text>{MONTHS[parseInt(month)]}</Text>
+      </View>
+      <View>
+        <FlatList
+          data={Object.keys(renderData[year][month])}
+          renderItem={(item) => RenderDate(item, { year, month, renderData })}
+          keyExtractor={(item) => JSON.stringify(item)}
+        />
+      </View>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'yellow',
+    padding: 20,
+    fontSize: 20,
+    color: 'white',
+    marginVertical: 8,
+  },
+})
 
 export default RenderMonth

@@ -1,18 +1,36 @@
-import { Text, StyleSheet } from 'react-native'
-import { Card } from 'react-native-elements' 
+import { Pressable, SafeAreaView, StyleSheet } from 'react-native'
+import { Card, Paragraph } from 'react-native-paper'
 
 const Note = ({ item: note }) => {
   console.log(note)
   return (
-    <Card 
-      onPress={() => {
-        console.log('clicked')
-      }}
-    >
-      <Text>{note.time}</Text>
-      <Text>{note.text}</Text>
-    </Card>
+    <SafeAreaView style={styles.container}>
+      <Pressable
+        onPress={() => {
+          console.log('clicked')
+        }}
+      >
+        <Card>
+          <Card.Title title={note.time} />
+          <Card.Content>
+            <Paragraph>{note.text}</Paragraph>
+          </Card.Content>
+        </Card>
+      </Pressable>
+    </SafeAreaView>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    paddingVertical: 4,
+  },
+  paragraph: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+})
 
 export default Note
