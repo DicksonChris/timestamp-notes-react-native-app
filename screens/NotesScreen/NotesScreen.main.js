@@ -18,6 +18,7 @@ import * as Animatable from 'react-native-animatable'
 import { useState, useEffect } from 'react'
 import { format } from 'date-fns'
 import RenderYear from './NotesScreen.renderItem.Year'
+import EditorModal from './NotesScreen.EditorModal'
 
 const NotesScreen = () => {
   const [renderData, setRenderData] = useState([])
@@ -28,14 +29,14 @@ const NotesScreen = () => {
   useEffect(() => {
     const addTimeProperties = () =>
       [...notes.notesArray].reverse().map((note) => {
-        const noteTimestamp = { ...note }
-        const timestamp = new Date(noteTimestamp.date)
-        noteTimestamp.year = format(timestamp, 'yyyy')
-        noteTimestamp.month = format(timestamp, 'M')
-        noteTimestamp.date = format(timestamp, 'd')
-        noteTimestamp.day = format(timestamp, 'EEE')
-        noteTimestamp.time = format(timestamp, 'h:mm a')
-        return noteTimestamp
+        const modifiedNote = { ...note }
+        const timestamp = new Date(modifiedNote.createdAt)
+        modifiedNote.year = format(timestamp, 'yyyy')
+        modifiedNote.month = format(timestamp, 'M')
+        modifiedNote.date = format(timestamp, 'd')
+        modifiedNote.day = format(timestamp, 'EEE')
+        modifiedNote.time = format(timestamp, 'h:mm a')
+        return modifiedNote
       })
 
     const notesArray = addTimeProperties()
@@ -74,39 +75,17 @@ const NotesScreen = () => {
     )
   }
 
-  const Editor = () => (
-    <Modal
-      animationType='slide'
-      transparent={true}
-      visible={isModalVisible}
-      onRequestClose={() => {
-        Alert.alert('Modal has been closed.')
-        setModalVisible(!isModalVisible)
-      }}
-    >
-      <SafeAreaView>
-        <TextInput style={styles.input} placeholder='Notes...' value={''} />
-      </SafeAreaView>
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <Text style={styles.modalText}>Hello World!</Text>
-          <Button title='Close' onPress={() => setIsModalVisible(!isModalVisible)} />
-        </View>
-      </View>
-    </Modal>
-  )
-
   // Container for entire list
   return (
     <View>
-      <Editor />
+      <EditorModal isVisible={[isModalVisible, setIsModalVisible]} />
       <FlatList
         data={Object.keys(renderData).reverse()}
         renderItem={(item) => RenderYear(item, { renderData })}
         keyExtractor={(item) => JSON.stringify(item)}
       />
       <FAB
-        style={{ position: 'absolute', bottom: 0, right: 0, margin: 16 }}
+        style={styles.FAB}
         icon={{ name: 'add', color: 'white' }}
         onPress={() => setIsModalVisible(true)}
       />
@@ -115,53 +94,7 @@ const NotesScreen = () => {
 }
 
 const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
+  FAB: { position: 'absolute', bottom: 0, right: 0, margin: 16 },
 })
 
 export default NotesScreen

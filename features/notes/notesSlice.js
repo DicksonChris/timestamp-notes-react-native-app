@@ -11,7 +11,6 @@ export const postNote = createAsyncThunk(
   async (payload, { dispatch, getState }) => {
     setTimeout(() => {
       const { notes } = getState()
-      payload.date = new Date().toISOString()
       payload.id = notes.notesArray.length
       dispatch(addNote(payload))
     }, 2000)
