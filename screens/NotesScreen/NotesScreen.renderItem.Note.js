@@ -2,7 +2,6 @@ import { Pressable, SafeAreaView, StyleSheet } from 'react-native'
 import { Card, Paragraph } from 'react-native-paper'
 
 const Note = ({ item: note }) => {
-  console.log(note)
   return (
     <SafeAreaView style={styles.container}>
       <Pressable
@@ -13,7 +12,7 @@ const Note = ({ item: note }) => {
         <Card>
           <Card.Title title={note.time} />
           <Card.Content>
-            <Paragraph>{note.text}</Paragraph>
+            <Paragraph>{note.content}</Paragraph>
           </Card.Content>
         </Card>
       </Pressable>

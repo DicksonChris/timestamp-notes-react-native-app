@@ -29,14 +29,14 @@ const NotesScreen = () => {
   useEffect(() => {
     const addTimeProperties = () =>
       [...notes.notesArray].reverse().map((note) => {
-        const noteTimestamp = { ...note }
-        const timestamp = new Date(noteTimestamp.date)
-        noteTimestamp.year = format(timestamp, 'yyyy')
-        noteTimestamp.month = format(timestamp, 'M')
-        noteTimestamp.date = format(timestamp, 'd')
-        noteTimestamp.day = format(timestamp, 'EEE')
-        noteTimestamp.time = format(timestamp, 'h:mm a')
-        return noteTimestamp
+        const modifiedNote = { ...note }
+        const timestamp = new Date(modifiedNote.createdAt)
+        modifiedNote.year = format(timestamp, 'yyyy')
+        modifiedNote.month = format(timestamp, 'M')
+        modifiedNote.date = format(timestamp, 'd')
+        modifiedNote.day = format(timestamp, 'EEE')
+        modifiedNote.time = format(timestamp, 'h:mm a')
+        return modifiedNote
       })
 
     const notesArray = addTimeProperties()
@@ -78,7 +78,7 @@ const NotesScreen = () => {
   // Container for entire list
   return (
     <View>
-      <EditorModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
+      <EditorModal isVisible={[isModalVisible, setIsModalVisible]} />
       <FlatList
         data={Object.keys(renderData).reverse()}
         renderItem={(item) => RenderYear(item, { renderData })}

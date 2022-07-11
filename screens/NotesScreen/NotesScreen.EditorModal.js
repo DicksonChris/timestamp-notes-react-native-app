@@ -1,87 +1,84 @@
-import { Alert, Button, Modal, SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import { TextInput } from 'react-native-paper'
-import { useState } from 'react'
+import { format } from 'date-fns'
+import { useEffect, useState } from 'react'
+import { Alert, StyleSheet } from 'react-native'
+import { Button, Dialog, Portal, Title, Text, TextInput } from 'react-native-paper'
 
-const EditorModal = ({ isModalVisible, setIsModalVisible }) => {
+const EditorModal = ({ isVisible }) => {
+  const [isModalVisible, setIsModalVisible] = isVisible
   const [text, setText] = useState('')
+  const timestamp = new Date()
+
+  const handleCancel = () => {
+    console.log('Back handler')
+    if (text !== '') {
+      Alert.alert(
+        'Are you sure you want to discard this note?',
+        '',
+        [
+          { text: 'Cancel', onPress: () => {} },
+          {
+            text: 'Discard',
+            onPress: () => {
+              setText('')
+              setIsModalVisible(false)
+            },
+          },
+        ],
+        { cancelable: false }
+      )
+      return true
+    } else {
+      setIsModalVisible(false)
+      return false
+    }
+  }
 
   return (
-    <Modal
-      style={styles.modal}
-      animationType='slide'
-      transparent={true}
-      visible={isModalVisible}
-      onRequestClose={() => {
-        Alert.alert('Modal has been closed.')
-        setModalVisible(!isModalVisible)
-      }}
-    >
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <Text>
-            {new Date().toLocaleTimeString('en-US', {
-              hour: 'numeric',
-              minute: 'numeric',
-              hour12: true,
-            })}
-          </Text>
+    <Portal>
+      <Dialog
+        visible={isModalVisible}
+        dismissable={false}
+        contentContainerStyle={{ backgroundColor: 'white' }}
+      >
+        <Dialog.Title>{format(timestamp, 'h:mm:ss a')}</Dialog.Title>
+        <Dialog.Content>
           <TextInput
-            style={styles.input}
-            mode='flat'
-            placeholder='Note...'
-            onChangeText={(text) => setText(text)}
+            style={styles.textInput}
+            multiline
+            numberOfLines={6}
+            maxLength={1500}
+            placeholder="Note..."
             value={text}
-            maxLength={500}
+            onChangeText={(text) => setText(text)}
+            autoFocus
           />
-          <View style={styles.buttonContainer}>
-            <Button title='Close' onPress={() => setIsModalVisible(!isModalVisible)} />
-            <Button
-              title='OK'
-              onPress={() => {
-                // submit note
-                setIsModalVisible(!isModalVisible)
-              }}
-            />
-          </View>
-        </View>
-      </View>
-    </Modal>
+          <Text style={styles.characterLimit}>{text.length}/1500</Text>
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={handleCancel}>Cancel</Button>
+          <Button
+            onPress={() => {
+              // TODO: add note to database, save date
+              setIsModalVisible(!isModalVisible)
+            }}
+          >
+            Save
+          </Button>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
   )
 }
 
 const styles = StyleSheet.create({
-  modal: {
-    height: '4%',
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalView: {
-    flex: 1,
-    margin: 8,
+  textInput: {
+    lineHeight: 53,
+    textAlignVertical: 'top',
     backgroundColor: 'white',
-    borderRadius: 4,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
-  input: {
-    flex: 1,
-    margin: 12,
-    minWidth: '80%',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    margin: 12,
+  characterLimit: {
+    color: '#999',
+    textAlign: 'right',
   },
 })
 
