@@ -18,9 +18,9 @@ import * as Animatable from 'react-native-animatable'
 import { useState, useEffect } from 'react'
 import { format } from 'date-fns'
 import RenderYear from './NotesScreen.renderItem.Year'
-import EditorModal from './NotesScreen.EditorModal'
+import NewNoteModal from './NotesScreen.NewNoteModal'
 
-const NotesScreen = () => {
+const NotesScreen = ({ navigation }) => {
   const [renderData, setRenderData] = useState([])
   const notes = useSelector((state) => state.notes)
 
@@ -35,7 +35,7 @@ const NotesScreen = () => {
         modifiedNote.month = format(timestamp, 'M')
         modifiedNote.date = format(timestamp, 'd')
         modifiedNote.day = format(timestamp, 'EEE')
-        modifiedNote.time = format(timestamp, 'h:mm a')
+        modifiedNote.time = format(timestamp, 'h:mm:ss a') // TODO: Add options for time format and always show seconds vs only show seconds when two notes are created within the same minute
         return modifiedNote
       })
 
@@ -60,7 +60,7 @@ const NotesScreen = () => {
       }
       yearsArr[key] = monthsArr
     }
-
+    // TODO save this to redux and pull it from redux inside child components
     setRenderData(yearsArr)
   }, [notes])
 
@@ -78,10 +78,11 @@ const NotesScreen = () => {
   // Container for entire list
   return (
     <View>
-      <EditorModal isVisible={[isModalVisible, setIsModalVisible]} />
+      <NewNoteModal isVisible={[isModalVisible, setIsModalVisible]} />
       <FlatList
         data={Object.keys(renderData).reverse()}
-        renderItem={(item) => RenderYear(item, { renderData })}
+        // TODO: Get renderDate from redux
+        renderItem={(item) => RenderYear(item, { renderData, navigation })}
         keyExtractor={(item) => JSON.stringify(item)}
       />
       <FAB

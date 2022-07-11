@@ -1,12 +1,12 @@
 import { format } from 'date-fns'
 import { useEffect, useState } from 'react'
-import { Alert, Modal, StyleSheet, Text } from 'react-native'
-import { Button, Portal, Title, TextInput } from 'react-native-paper'
+import { Alert, StyleSheet } from 'react-native'
 import { Dialog } from 'react-native-elements'
-import { useSelector, useDispatch } from 'react-redux'
+import { Button, TextInput, Title } from 'react-native-paper'
+import { useDispatch } from 'react-redux'
 import { postNote } from '../../features/notes/notesSlice'
 
-const EditorModal = ({ isVisible }) => {
+const NewNoteModal = ({ isVisible }) => {
   const [isModalVisible, setIsModalVisible] = isVisible
   const [timestamp, setTimestamp] = useState(new Date())
   const [text, setText] = useState('')
@@ -45,7 +45,6 @@ const EditorModal = ({ isVisible }) => {
   }
 
   const handleSave = () => {
-    // TODO: add note to database, save date
     const newNote = {
       createdAt: timestamp.toISOString(),
       content: text,
@@ -100,4 +99,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default EditorModal
+export default NewNoteModal

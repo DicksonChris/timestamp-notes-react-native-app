@@ -1,29 +1,31 @@
 import { Pressable, SafeAreaView, StyleSheet } from 'react-native'
 import { Card, Paragraph } from 'react-native-paper'
 
-const Note = ({ item: note }) => {
+const Note = ({ item: note }, { navigation }) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <Card style={styles.container}>
       <Pressable
-        onPress={() => {
-          console.log('clicked')
+        android_ripple={{
+          color: 'rgb(210, 230, 255)',
+          borderless: true,
+          foreground: true,
         }}
+        onPress={() => navigation.navigate('NoteEditor', note)}
       >
-        <Card>
-          <Card.Title title={note.time} />
-          <Card.Content>
-            <Paragraph>{note.content}</Paragraph>
-          </Card.Content>
-        </Card>
+        <Card.Title title={note.time} />
+        <Card.Content>
+          <Paragraph>{note.content}</Paragraph>
+        </Card.Content>
       </Pressable>
-    </SafeAreaView>
+    </Card>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    paddingVertical: 4,
+    marginVertical: 4,
+    paddingBottom: 8,
   },
   paragraph: {
     fontSize: 18,

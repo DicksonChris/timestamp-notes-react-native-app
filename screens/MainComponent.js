@@ -13,6 +13,7 @@ import logo from '../assets/images/logo.png'
 import { fetchNotes } from '../features/notes/notesSlice'
 import NotesScreen from './NotesScreen/NotesScreen.main'
 import AboutScreen from './AboutScreen'
+import NoteEditorScreen from './NoteEditorScreen/NoteEditorScreen.main'
 
 const Drawer = createDrawerNavigator()
 
@@ -26,16 +27,50 @@ const NotesNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen
-        name='Notes'
+        name="Notes"
         component={NotesScreen}
         options={({ navigation }) => ({
           title: 'Notes',
           headerLeft: () => (
             <Icon
-              name='bars'
-              type='font-awesome'
+              name="bars"
+              type="font-awesome"
               iconStyle={styles.stackIcon}
               onPress={() => navigation.toggleDrawer()}
+            />
+          ),
+          headerRight: () => (
+            <View style={{ flexDirection: 'row', marginHorizontal: 8 }}>
+              {/* // TODO Custom Component for HeaderRight
+               */}
+              <Icon
+                name="check"
+                type="font-awesome"
+                iconStyle={styles.stackIcon}
+                onPress={() => console.log('Update note')}
+              />
+              <Icon
+                name="trash"
+                type="font-awesome"
+                iconStyle={styles.stackIcon}
+                onPress={() => console.log('Delete note')}
+              />
+            </View>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="NoteEditor"
+        component={NoteEditorScreen}
+        options={({ route }) => ({
+          // title: route.params.note.createdAt,
+          title: 'Edit',
+          headerLeft: () => (
+            <Icon
+              name="times"
+              type="font-awesome"
+              iconStyle={styles.stackIcon}
+              onPress={() => navigation.goBack()}
             />
           ),
         })}
@@ -49,13 +84,13 @@ const AboutNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen
-        name='About'
+        name="About"
         component={AboutScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
             <Icon
-              name='info-circle'
-              type='font-awesome'
+              name="info-circle"
+              type="font-awesome"
               iconStyle={styles.stackIcon}
               onPress={() => navigation.toggleDrawer()}
             />
@@ -95,27 +130,27 @@ const Main = () => {
       }}
     >
       <Drawer.Navigator
-        initialRouteName='Notes'
+        initialRouteName="Notes"
         drawerContent={CustomDrawerContent}
         drawerStyle={{ backgroundColor: '#CEC8FF' }}
       >
         <Drawer.Screen
-          name='Notes'
+          name="Notes"
           component={NotesNavigator}
           options={{
             title: 'Notes',
             drawerIcon: ({ color }) => (
-              <Icon name='home' type='font-awesome' size={24} color={color} />
+              <Icon name="home" type="font-awesome" size={24} color={color} />
             ),
           }}
         />
         <Drawer.Screen
-          name='About'
+          name="About"
           component={AboutNavigator}
           options={{
             title: 'About',
             drawerIcon: ({ color }) => (
-              <Icon name='info-circle' type='font-awesome' size={24} color={color} />
+              <Icon name="info-circle" type="font-awesome" size={24} color={color} />
             ),
           }}
         />
