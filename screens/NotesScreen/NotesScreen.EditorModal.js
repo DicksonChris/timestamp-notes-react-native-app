@@ -1,15 +1,27 @@
 import { format } from 'date-fns'
 import { useEffect, useState } from 'react'
-import { Alert, StyleSheet } from 'react-native'
-import { Button, Dialog, Portal, Title, Text, TextInput } from 'react-native-paper'
+import { Alert, Modal, StyleSheet, Text } from 'react-native'
+import { Button, Portal, Title, TextInput } from 'react-native-paper'
+import { Dialog } from 'react-native-elements'
+import { useSelector, useDispatch } from 'react-redux'
+import { postNote } from '../../features/notes/notesSlice'
 
 const EditorModal = ({ isVisible }) => {
   const [isModalVisible, setIsModalVisible] = isVisible
+  const [timestamp, setTimestamp] = useState(new Date())
   const [text, setText] = useState('')
-  const timestamp = new Date()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    setTimestamp(new Date())
+  }, [isModalVisible])
+
+  const resetModal = () => {
+    setIsModalVisible(false)
+    setText('')
+  }
 
   const handleCancel = () => {
-    console.log('Back handler')
     if (text !== '') {
       Alert.alert(
         'Are you sure you want to discard this note?',
@@ -19,8 +31,7 @@ const EditorModal = ({ isVisible }) => {
           {
             text: 'Discard',
             onPress: () => {
-              setText('')
-              setIsModalVisible(false)
+              resetModal()
             },
           },
         ],
@@ -33,46 +44,53 @@ const EditorModal = ({ isVisible }) => {
     }
   }
 
+  const handleSave = () => {
+    // TODO: add note to database, save date
+    const newNote = {
+      createdAt: timestamp.toISOString(),
+      content: text,
+    }
+    dispatch(postNote(newNote))
+    console.log(newNote)
+    resetModal()
+  }
+
   return (
-    <Portal>
-      <Dialog
-        visible={isModalVisible}
-        dismissable={false}
-        contentContainerStyle={{ backgroundColor: 'white' }}
-      >
-        <Dialog.Title>{format(timestamp, 'h:mm:ss a')}</Dialog.Title>
-        <Dialog.Content>
-          <TextInput
-            style={styles.textInput}
-            multiline
-            numberOfLines={6}
-            maxLength={1500}
-            placeholder="Note..."
-            value={text}
-            onChangeText={(text) => setText(text)}
-            autoFocus
-          />
-          <Text style={styles.characterLimit}>{text.length}/1500</Text>
-        </Dialog.Content>
-        <Dialog.Actions>
-          <Button onPress={handleCancel}>Cancel</Button>
-          <Button
-            onPress={() => {
-              // TODO: add note to database, save date
-              setIsModalVisible(!isModalVisible)
-            }}
-          >
-            Save
-          </Button>
-        </Dialog.Actions>
-      </Dialog>
-    </Portal>
+    <Dialog
+      visible={isModalVisible}
+      onRequestClose={handleCancel}
+      style={{ flex: 1 }}
+      overlayStyle={{
+        padding: 8,
+        paddingTop: 16,
+        marginTop: 64,
+        marginBottom: 16,
+        marginHorizontal: 16,
+      }}
+    >
+      <Title style={{ fontSize: 24, margin: 16 }}>{format(timestamp, 'h:mm:ss a')}</Title>
+      <TextInput
+        style={{
+          textAlignVertical: 'top',
+          backgroundColor: 'white',
+        }}
+        multiline
+        maxLength={1500}
+        placeholder="Note..."
+        value={text}
+        onChangeText={(text) => setText(text)}
+        autoFocus
+      />
+      <Dialog.Actions>
+        <Button onPress={handleSave}>Save</Button>
+        <Button onPress={handleCancel}>Cancel</Button>
+      </Dialog.Actions>
+    </Dialog>
   )
 }
 
 const styles = StyleSheet.create({
   textInput: {
-    lineHeight: 53,
     textAlignVertical: 'top',
     backgroundColor: 'white',
   },

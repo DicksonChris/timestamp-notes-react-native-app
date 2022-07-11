@@ -2,25 +2,25 @@ import { FlatList, StyleSheet, Text, View } from 'react-native'
 import RenderDate from './NotesScreen.renderItem.Date'
 
 const RenderMonth = ({ item: month }, { year, renderData }) => {
-  const MONTHS = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ]
+  const MONTHS = {
+    1: 'January',
+    2: 'February',
+    3: 'March',
+    4: 'April',
+    5: 'May',
+    6: 'June',
+    7: 'July',
+    8: 'August',
+    9: 'September',
+    10: 'October',
+    11: 'November',
+    12: 'December',
+  }
 
   return (
     <View>
       <View style={styles.container}>
-        <Text>{MONTHS[parseInt(month)]}</Text>
+        <Text>{MONTHS[month]}</Text>
       </View>
       <View>
         <FlatList
