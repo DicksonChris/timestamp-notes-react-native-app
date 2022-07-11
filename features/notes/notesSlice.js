@@ -9,7 +9,6 @@ export const fetchNotes = createAsyncThunk('notes/fetchNotes', async () => {
   return response.json()
 })
 
-<<<<<<< HEAD
 export const postNote = createAsyncThunk('notes/postNote', async (note, { dispatch }) => {
   // Add note to database
   const response = await fetch(baseUrl + 'notes', {
@@ -20,16 +19,6 @@ export const postNote = createAsyncThunk('notes/postNote', async (note, { dispat
 
   if (!response.ok) {
     return Promise.reject('Unable to post, status: ' + response.status)
-=======
-export const postNote = createAsyncThunk(
-  'notes/postNote',
-  async (payload, { dispatch, getState }) => {
-    setTimeout(() => {
-      const { notes } = getState()
-      payload.id = notes.notesArray.length
-      dispatch(addNote(payload))
-    }, 2000)
->>>>>>> 731a6f9881c1889b93a13e7bb7701a51627a5a14
   }
   const data = await response.json()
   dispatch(addNote(data))

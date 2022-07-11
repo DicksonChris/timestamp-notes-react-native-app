@@ -18,11 +18,7 @@ import * as Animatable from 'react-native-animatable'
 import { useState, useEffect } from 'react'
 import { format } from 'date-fns'
 import RenderYear from './NotesScreen.renderItem.Year'
-<<<<<<< HEAD
 import NewNoteModal from './NotesScreen.NewNoteModal'
-=======
-import EditorModal from './NotesScreen.EditorModal'
->>>>>>> 731a6f9881c1889b93a13e7bb7701a51627a5a14
 
 const NotesScreen = ({ navigation }) => {
   const [renderData, setRenderData] = useState([])
@@ -39,11 +35,7 @@ const NotesScreen = ({ navigation }) => {
         modifiedNote.month = format(timestamp, 'M')
         modifiedNote.date = format(timestamp, 'd')
         modifiedNote.day = format(timestamp, 'EEE')
-<<<<<<< HEAD
         modifiedNote.time = format(timestamp, 'h:mm:ss a') // TODO: Add options for time format and always show seconds vs only show seconds when two notes are created within the same minute
-=======
-        modifiedNote.time = format(timestamp, 'h:mm a')
->>>>>>> 731a6f9881c1889b93a13e7bb7701a51627a5a14
         return modifiedNote
       })
 
@@ -86,11 +78,7 @@ const NotesScreen = ({ navigation }) => {
   // Container for entire list
   return (
     <View>
-<<<<<<< HEAD
       <NewNoteModal isVisible={[isModalVisible, setIsModalVisible]} />
-=======
-      <EditorModal isVisible={[isModalVisible, setIsModalVisible]} />
->>>>>>> 731a6f9881c1889b93a13e7bb7701a51627a5a14
       <FlatList
         data={Object.keys(renderData).reverse()}
         // TODO: Get renderDate from redux
