@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import RenderNote from './NotesScreen.renderItem.Note'
 
-const RenderDate = ({ item: date }, { year, month, renderData }) => {
+const RenderDate = ({ item: date }, { year, month, renderData, navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.date}>
@@ -11,7 +11,7 @@ const RenderDate = ({ item: date }, { year, month, renderData }) => {
       <FlatList
         style={styles.notes}
         data={renderData[year][month][date]}
-        renderItem={RenderNote}
+        renderItem={(item) => RenderNote(item, { navigation })}
         keyExtractor={(item) => JSON.stringify(item)}
       />
     </View>
