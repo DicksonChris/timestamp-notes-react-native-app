@@ -4,7 +4,7 @@ import { Alert, StyleSheet } from 'react-native'
 import { Dialog } from 'react-native-elements'
 import { Button, TextInput, Title } from 'react-native-paper'
 import { useDispatch } from 'react-redux'
-import { postNote } from '../../features/notes/notesSlice'
+import { postNote } from '../../../features/notes/notesSlice'
 
 const NewNoteModal = ({ isVisible }) => {
   const [isModalVisible, setIsModalVisible] = isVisible
@@ -50,7 +50,6 @@ const NewNoteModal = ({ isVisible }) => {
       content: text,
     }
     dispatch(postNote(newNote))
-    console.log(newNote)
     resetModal()
   }
 

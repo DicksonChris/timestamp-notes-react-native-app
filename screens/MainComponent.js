@@ -8,12 +8,13 @@ import Constants from 'expo-constants'
 import { useEffect } from 'react'
 import { Image, Platform, StyleSheet, Text, View } from 'react-native'
 import { Icon } from 'react-native-elements'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import logo from '../assets/images/logo.png'
 import { fetchNotes } from '../features/notes/notesSlice'
 import NotesScreen from './NotesScreen/NotesScreen.main'
 import AboutScreen from './AboutScreen'
 import NoteEditorScreen from './NoteEditorScreen/NoteEditorScreen.main'
+import { format } from 'date-fns'
 
 const Drawer = createDrawerNavigator()
 
@@ -39,40 +40,13 @@ const NotesNavigator = () => {
               onPress={() => navigation.toggleDrawer()}
             />
           ),
-          headerRight: () => (
-            <View style={{ flexDirection: 'row', marginHorizontal: 8 }}>
-              {/* // TODO Custom Component for HeaderRight
-               */}
-              <Icon
-                name="check"
-                type="font-awesome"
-                iconStyle={styles.stackIcon}
-                onPress={() => console.log('Update note')}
-              />
-              <Icon
-                name="trash"
-                type="font-awesome"
-                iconStyle={styles.stackIcon}
-                onPress={() => console.log('Delete note')}
-              />
-            </View>
-          ),
         })}
       />
       <Stack.Screen
         name="NoteEditor"
         component={NoteEditorScreen}
-        options={({ route }) => ({
-          // title: route.params.note.createdAt,
+        options={({ navigation, route }) => ({
           title: 'Edit',
-          headerLeft: () => (
-            <Icon
-              name="times"
-              type="font-awesome"
-              iconStyle={styles.stackIcon}
-              onPress={() => navigation.goBack()}
-            />
-          ),
         })}
       />
     </Stack.Navigator>
@@ -116,6 +90,7 @@ const CustomDrawerContent = (props) => (
 )
 
 const Main = () => {
+  const state = useSelector((state) => state)
   const dispatch = useDispatch()
 
   useEffect(() => {

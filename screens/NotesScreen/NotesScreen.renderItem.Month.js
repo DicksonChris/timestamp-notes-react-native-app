@@ -24,7 +24,7 @@ const RenderMonth = ({ item: month }, { year, renderData, navigation }) => {
       </View>
       <View>
         <FlatList
-          data={Object.keys(renderData[year][month])}
+          data={Object.keys(renderData[year][month]).reverse()}
           renderItem={(item) => RenderDate(item, { year, month, renderData, navigation })}
           keyExtractor={(item) => JSON.stringify(item)}
         />

@@ -17,52 +17,25 @@ import { baseUrl } from '../../shared/baseUrl'
 import * as Animatable from 'react-native-animatable'
 import { useState, useEffect } from 'react'
 import { format } from 'date-fns'
-import RenderYear from './NotesScreen.renderItem.Year'
-import NewNoteModal from './NotesScreen.NewNoteModal'
+import RenderYear from './NotesScreen.renderItem.renderYear'
+import NewNoteModal from './Modal/NotesScreen.NewNoteModal'
+import { fetchNotes, selectNotes, selectComputedNotes } from '../../features/notes/notesSlice'
 
 const NotesScreen = ({ navigation }) => {
   const [renderData, setRenderData] = useState([])
-  const notes = useSelector((state) => state.notes)
+
+  const notes = useSelector(selectNotes)
 
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const computedNotes = useSelector(selectComputedNotes)
 
   useEffect(() => {
-    const addTimeProperties = () =>
-      [...notes.notesArray].reverse().map((note) => {
-        const modifiedNote = { ...note }
-        const timestamp = new Date(modifiedNote.createdAt)
-        modifiedNote.year = format(timestamp, 'yyyy')
-        modifiedNote.month = format(timestamp, 'M')
-        modifiedNote.date = format(timestamp, 'd')
-        modifiedNote.day = format(timestamp, 'EEE')
-        modifiedNote.time = format(timestamp, 'h:mm:ss a') // TODO: Add options for time format and always show seconds vs only show seconds when two notes are created within the same minute
-        return modifiedNote
-      })
+    setRenderData(computedNotes)
+  }, [])
 
-    const notesArray = addTimeProperties()
-    const reduceArr = (arr, keyString) =>
-      arr.reduce((acc, curr) => {
-        const key = curr[keyString]
-        if (!acc[key]) {
-          acc[key] = [curr]
-        } else {
-          acc[key].push(curr)
-        }
-        return acc
-      }, {})
-    const yearsArr = reduceArr(notesArray, 'year')
-
-    for (const [key, arr] of Object.entries(yearsArr)) {
-      const monthsArr = reduceArr(arr, 'month')
-      for (const [key, arr] of Object.entries(monthsArr)) {
-        const datesArr = reduceArr(arr, 'date')
-        monthsArr[key] = datesArr
-      }
-      yearsArr[key] = monthsArr
-    }
-    // TODO save this to redux and pull it from redux inside child components
-    setRenderData(yearsArr)
-  }, [notes])
+  useEffect(() => {
+    setRenderData(computedNotes)
+  }, [isModalVisible])
 
   if (notes.isLoading) {
     return <Loading />
@@ -74,14 +47,12 @@ const NotesScreen = ({ navigation }) => {
       </View>
     )
   }
-
-  // Container for entire list
+  // Todo: Trigger rerender on new note
   return (
     <View>
       <NewNoteModal isVisible={[isModalVisible, setIsModalVisible]} />
       <FlatList
         data={Object.keys(renderData).reverse()}
-        // TODO: Get renderDate from redux
         renderItem={(item) => RenderYear(item, { renderData, navigation })}
         keyExtractor={(item) => JSON.stringify(item)}
       />

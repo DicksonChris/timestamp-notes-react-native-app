@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import RenderMonth from './NotesScreen.renderItem.Month'
 
-const RenderYear = ({ item: year }, { renderData, navigation }) => {
+const renderYear = ({ item: year }, { renderData, navigation }) => {
   return (
     <View>
       <View>
@@ -29,4 +29,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default RenderYear
+export default renderYear

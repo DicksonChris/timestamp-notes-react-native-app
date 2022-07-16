@@ -2,6 +2,8 @@ import { FlatList, StyleSheet, Text, View } from 'react-native'
 import RenderNote from './NotesScreen.renderItem.Note'
 
 const RenderDate = ({ item: date }, { year, month, renderData, navigation }) => {
+  // this is what should be reversed
+  const sortDateReversed = (a, b) => (a.createdAt < b.createdAt ? 1 : -1)
   return (
     <View style={styles.container}>
       <View style={styles.date}>
@@ -10,7 +12,7 @@ const RenderDate = ({ item: date }, { year, month, renderData, navigation }) => 
       </View>
       <FlatList
         style={styles.notes}
-        data={renderData[year][month][date]}
+        data={renderData[year][month][date].sort(sortDateReversed)}
         renderItem={(item) => RenderNote(item, { navigation })}
         keyExtractor={(item) => JSON.stringify(item)}
       />
